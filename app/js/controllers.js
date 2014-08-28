@@ -3,9 +3,18 @@
 /* Controllers */
 
 angular.module('skySquash.controllers', [])
-  .controller('MyCtrl1', ['$scope', function($scope) {
+    .controller('IndexCtrl', ['$scope', '$firebase', function($scope, $firebase) {
+    }])
+    .controller('BookingsCtrl', ['$scope', '$firebase', function($scope, $firebase) {
+        var ref = new Firebase('https://sky-squash.firebaseio.com/bookings');
+        var sync = $firebase(ref);
 
-  }])
-  .controller('MyCtrl2', ['$scope', function($scope) {
+        $scope.bookings = sync.$asArray();
+        $scope.new = {};
 
-  }]);
+        $scope.create = function () {
+            $scope.new.status = 'open';
+            $scope.bookings.$add($scope.new);
+            $scope.new = {};
+        };
+    }]);

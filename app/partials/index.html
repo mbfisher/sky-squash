@@ -1,0 +1,44 @@
+<h1>Sky Squash</h1>
+
+<div class="row">
+<div class="bookings col-md-8" ng-controller="BookingsCtrl">
+  <h2>Bookings</h2>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Location</th>
+        <th>Status</th>
+        <th>Courts</th>
+        <th>Players</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="booking in bookings | orderBy:date">
+        <td>{{booking.time}}</td>
+        <td>{{booking.location}}</td>
+        <td>{{booking.status}}</td>
+        <td>{{booking.courts}}</td>
+        <td>{{booking.players}}</td>
+        <td><a ng-click="join(booking.id)">Join</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <form class="form-inline" role="form" ng-submit="create()">
+    <div class="form-group">
+      <input class="form-control" id="time" ng-model="new.time" placeholder="When" />
+    </div>
+    <div class="form-group">
+      <input class="form-control" id="location" ng-model="new.location" placeholder="Where" />
+    </div>
+    <div class="form-group">
+      <button type="submit">Create</button>
+    </div>
+  </form>
+</div>
+<div class="user col-md-4">
+  <h2>User</h2>
+</div>

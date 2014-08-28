@@ -7,7 +7,8 @@ angular.module('skySquash', [
   'skySquash.filters',
   'skySquash.services',
   'skySquash.directives',
-  'skySquash.controllers'
+  'skySquash.controllers',
+  'firebase'
 ]).
 config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/', {templateUrl: 'partials/index.html', controller: 'IndexCtrl'});
