@@ -1,12 +1,7 @@
-<h1>Sky Squash</h1>
-
-<div class="row">
-  <div ng-show="auth.user">
-    <div class="bookings col-md-8" ng-include="'partials/bookings.html'"></div>
-    <div class="bookings col-md-4" ng-include="'partials/user.html'"></div>
-  </div>
-  <div ng-hide="auth.user">
-    <p>Welcome, please log in.</p>
-    <button ng-click="auth.$login('google')">Login</button>
-  </div>
+<div ng-show="auth.user">
+  <div ng-include="'partials/bookings.html'"></div>
+</div>
+<div ng-hide="auth.user">
+  <p>Welcome, please log in.</p>
+  <button ng-click="auth.$login('google')">Login</button>
 </div>

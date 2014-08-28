@@ -1,4 +1,8 @@
 <div ng-controller="UserCtrl">
-  <h2>User</h2>
-  <p>{{user.displayName}}</p>
+  <div class="user__logout">
+    <a ng-click="logout()">Logout</a>
+  </div>
+  <div class="user__info" ng-show="user">
+    <p>{{user.displayName}}</p>
+  </div>
 </div>

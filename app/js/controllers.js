@@ -41,7 +41,10 @@ angular.module('skySquash.controllers', [])
             $scope.bookings.$save(booking);
         };
     }])
-    .controller('UserCtrl', ['$scope', 'auth', 'users', function ($scope, auth, users) {
-        $scope.user = auth.user;
-        $scope.users = users;
+    .controller('UserCtrl', ['$scope', 'auth', function ($scope, auth) {
+        auth.$getCurrentUser().then(function (user) {
+            $scope.user = user;
+        });
+
+        $scope.logout = auth.$logout;
     }]);
