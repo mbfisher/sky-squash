@@ -8,7 +8,8 @@ angular.module('skySquash', [
     'skySquash.services',
     'skySquash.directives',
     'skySquash.controllers',
-    'firebase'
+    'firebase',
+    'ui.bootstrap'
 ]).
 config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/', {
