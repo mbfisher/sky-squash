@@ -20,10 +20,12 @@
         <td>{{booking.courts}}</td>
         <td><span ng-repeat="id in booking.players">{{playerName(id)}}</span></td>
         <td>
+          <span ng-show="booking.status !== 'Confirmed'">
           <a ng-show="showJoin(booking)" ng-click="join(booking)" class="glyphicon glyphicon-plus"></a>
           <a ng-show="!showJoin(booking)" ng-click="leave(booking)" class="glyphicon glyphicon-minus"></a>
-          <a ng-click="close(booking)" class="glyphicon glyphicon-ok"></a>
+          <a ng-click="confirm(booking)" class="glyphicon glyphicon-ok"></a>
           <a ng-click="edit(booking)" class="glyphicon glyphicon-pencil"></a>
+          </span>
         </td>
       </tr>
     </tbody>
@@ -40,4 +42,27 @@
       <button type="submit" class="btn btn-default">Create</button>
     </div>
   </form>
+
+
+  <script type="text/ng-template" id="confirmBooking.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Confirm Booking</h3>
+    </div>
+    <form role="form" class="form">
+      <div class="modal-body">
+          <div class="form-group">
+            <label>Courts</label>
+            <input class="form-control" ng-model="booking.courts" />
+          </div>
+          <div class="form-group">
+            <label>Cost</label>
+            <input class="form-control" ng-model="booking.cost" />
+          </div>
+      </div>
+      <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" ng-click="ok()">Confirm</button>
+          <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+      </div>
+    </form>
+  </script>
 </div>

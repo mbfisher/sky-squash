@@ -6,7 +6,13 @@ angular.module('skySquash.controllers', [])
     .controller('IndexCtrl', ['$scope', 'auth', function($scope, auth) {
         $scope.auth = auth;
     }])
-    .controller('BookingsCtrl', ['$scope', '$firebase', 'auth', 'users', function($scope, $firebase, auth, users) {
+    .controller('BookingsCtrl', [
+        '$scope',
+        '$firebase',
+        'auth',
+        'users',
+        '$modal',
+    function($scope, $firebase, auth, users, $modal) {
         var ref = new Firebase('https://sky-squash.firebaseio.com/bookings');
         var sync = $firebase(ref);
 
@@ -39,6 +45,33 @@ angular.module('skySquash.controllers', [])
             booking.players = booking.players || [];
             booking.players.push(auth.user.uid);
             $scope.bookings.$save(booking);
+        };
+
+        $scope.confirm = function (booking) {
+            var modal = $modal.open({
+                templateUrl: 'confirmBooking.html',
+                resolve: {
+                    booking: function () {
+                        return booking;
+                    }
+                },
+                controller: ['$scope', '$modalInstance', 'booking', function ($scope, $instance, booking) {
+                    $scope.booking = booking;
+
+                    $scope.ok = function () {
+                        $instance.close();
+                    };
+
+                    $scope.cancel = function () {
+                        $instance.dismiss('cancel');
+                    };
+                }]
+            });
+            
+            modal.result.then(function() {
+                booking.status = 'Confirmed';
+                $scope.bookings.$save(booking);
+            });
         };
     }])
     .controller('UserCtrl', ['$scope', 'auth', function ($scope, auth) {
