@@ -3,14 +3,22 @@
 
 // Declare app level module which depends on filters, and services
 angular.module('skySquash', [
-  'ngRoute',
-  'skySquash.filters',
-  'skySquash.services',
-  'skySquash.directives',
-  'skySquash.controllers',
-  'firebase'
+    'ngRoute',
+    'skySquash.filters',
+    'skySquash.services',
+    'skySquash.directives',
+    'skySquash.controllers',
+    'firebase'
 ]).
 config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/', {templateUrl: 'partials/index.html', controller: 'IndexCtrl'});
-  $routeProvider.otherwise({redirectTo: '/'});
+    $routeProvider.when('/', {
+        templateUrl: 'partials/index.html',
+        controller: 'IndexCtrl',
+        resolve: {
+            'currentUser': ['auth', function (auth) {
+                return auth.$getCurrentUser();
+            }]
+        }
+    });
+    $routeProvider.otherwise({redirectTo: '/'});
 }]);
