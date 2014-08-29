@@ -71,15 +71,18 @@ angular.module('skySquash.controllers', [])
                 transactions.$sync.$add({
                     type: 'credit',
                     value: costPerPlayer,
-                    booking: booking.$id
+                    booking: booking.$id,
+                    timestamp: new Date().getTime()
                 });
 
-                //booking.status = 'Confirmed';
+                booking.status = 'Confirmed';
                 $scope.bookings.$save(booking);
             });
         };
     }])
     .controller('UserCtrl', ['$scope', 'user', 'transactions', 'auth', function ($scope, user, transactions, auth) {
+        $scope.logout = auth.$logout;
+
         user.$loaded().then(function (user) {
             user.$sync.$bindTo($scope, 'user'); 
         });
@@ -106,5 +109,14 @@ angular.module('skySquash.controllers', [])
             }, 0);
         };
 
-        $scope.logout = auth.$logout;
+        $scope.deposit = function () {
+            transactions.$sync.$add({
+                type:'debit',
+                value: Number($scope.depositAmount),
+                timestamp: new Date().getTime()
+            });
+
+            $scope.depositAmount = null;
+            $scope.showDeposit = false;
+        };
     }]);

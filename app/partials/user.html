@@ -1,8 +1,18 @@
 <div ng-controller="UserCtrl" ng-show="user">
   <div class="col-md-offset-9 col-md-2 user__info">
-    <p>{{user.displayName}} | <span class="user__balance" ng-class="{'user__balance--debt': (balance < 0)}">{{balance | currency:"£"}}</span></p>
+    <p>{{user.displayName}} | <a ng-click="showDeposit = true" class="user__balance" ng-class="{'user__balance--debt': (balance < 0)}">{{balance | currency:"£"}}</span></p>
   </div>
   <div class="col-md-1 user__logout">
     <a ng-click="logout()">Logout</a>
   </div>
+
+  <div ng-show="showDeposit" class="user__deposit">
+    <form class="form form-inline" role="form" ng-submit="deposit()">
+      <div class="form-group">
+        <input class="form-control" ng-model="depositAmount" />
+      </div>
+      <div class="form-group">
+        <button class="btn btn-default">Deposit</button>
+      </div>
+    </form>
 </div>
