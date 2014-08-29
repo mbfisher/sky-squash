@@ -13,11 +13,11 @@ angular.module('skySquash', [
 ]).
 config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/', {
-        templateUrl: 'partials/index.html',
-        controller: 'IndexCtrl',
+        templateUrl: 'app.html',
+        controller: 'AppCtrl',
         resolve: {
-            'currentUser': ['auth', function (auth) {
-                return auth.$getCurrentUser();
+            'user': ['user', function (user) {
+                return user.$loaded();
             }]
         }
     });

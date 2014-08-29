@@ -18,7 +18,7 @@
         <td>{{booking.location}}</td>
         <td>{{booking.status}}</td>
         <td>{{booking.courts}}</td>
-        <td><span ng-repeat="id in booking.players">{{playerName(id)}}</span></td>
+        <td><span ng-repeat="player in booking.players">{{player}}</span></td>
         <td>
           <span ng-show="booking.status !== 'Confirmed'">
           <a ng-show="showJoin(booking)" ng-click="join(booking)" class="glyphicon glyphicon-plus"></a>

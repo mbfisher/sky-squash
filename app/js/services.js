@@ -16,7 +16,7 @@ angular.module('skySquash.services', [])
                 ref.child('users').child(user.uid).set({
                     displayName: user.displayName,
                     provider: user.provider,
-                    provuder_id: user.id
+                    provider_id: user.id
                 });
             } else {
                 // Logged out
@@ -25,22 +25,43 @@ angular.module('skySquash.services', [])
 
         return authClient;
     }])
-    .factory('users', ['$firebaseSimpleLogin', '$firebase', function ($firebaseSimpleLogin, $firebase) {
-        var ref = new Firebase('https://sky-squash.firebaseio.com/users');
-        var sync = $firebase(ref).$asArray();
-
-        var users = {
-            $loaded: sync.$loaded,
-            all: [],
-            get: function (id) {
-                return this.all.$getRecord(id);
+    .factory('user', ['$firebase', 'auth', '$q', function ($firebase, auth, $q) {
+        var df = $q.defer();
+        var user = {
+            $sync: null,
+            $loaded: function () {
+                return df.promise;
             }
         };
 
-        sync.$loaded().then(function (data) {
-            users.all = data;
+        auth.$getCurrentUser().then(function () {
+            var ref = new Firebase('https://sky-squash.firebaseio.com/users').child(auth.user.uid);
+            user.$sync = $firebase(ref).$asObject();
+
+            user.$sync.$loaded().then(function () {
+                df.resolve(user);
+            });
         });
 
-        return users;
+        return user;
+    }])
+    .factory('transactions', ['$firebase', 'auth', '$q', function ($firebase, auth, $q) {
+        var df = $q.defer();
+        var transactions = {
+            $sync: null,
+            $loaded: function () {
+                return df.promise;
+            }
+        };
+
+        auth.$getCurrentUser().then(function () {
+            var ref = new Firebase('https://sky-squash.firebaseio.com/transactions').child(auth.user.uid);
+            transactions.$sync = $firebase(ref).$asArray();
+
+            transactions.$sync.$loaded().then(function () {
+                df.resolve(transactions);
+            });
+        });
+
+        return transactions;
     }]);
-         
