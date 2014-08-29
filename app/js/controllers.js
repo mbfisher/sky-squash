@@ -5,11 +5,6 @@
 angular.module('skySquash.controllers', [])
     .controller('AppCtrl', ['$scope', 'auth', function($scope, auth) {
         $scope.auth = auth;
-        /*$scope.login = function (provider) {
-            auth.$login(provider).then(function () {
-                console.log(arguments);
-            });
-        };*/
     }])
     .controller('BookingsCtrl', [
         '$scope',
