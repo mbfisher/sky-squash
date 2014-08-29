@@ -15,6 +15,10 @@ a {
     margin-top: -3px;
 }
 
+.user__info a {
+    color: white;
+}
+
 .user__logout {
     margin-top: -3px;
 }
