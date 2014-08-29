@@ -1,14 +1,17 @@
 language: node_js
 node_js:
-  - "0.10"
+  - '0.10'
 
 before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - npm start > /dev/null &
-  - npm run update-webdriver
-  - sleep 1 # give server time to start
+  - npm install
 
 script:
-  - node_modules/.bin/karma start test/karma.conf.js --no-auto-watch --single-run --reporters=dots --browsers=Firefox
-  - node_modules/.bin/protractor test/protractor-conf.js --browser=firefox
+  - npm run-script test-single-run
+
+after_script:
+  - ./node_modules/.bin/firebase deploy --email $FIREBASE_EMAIL --pasword $FIREBASE_PASSWORD -s
+
+env:
+  global:
+  - secure: Hu5d0Rj2lcFvEKFbgdWx1k2Q2NtG+QN8ALMu+0lnhwo3jjK5zgYDXxFe7TwJGpMP3sLVR0vkzj+t0bJ9VnR9tvnm+gI6y7l+DAsbuA/AzAAWrJv95xHetIPkPPwDqwXATKH4quCCvbXAzumJMtUsB1BupCcgx4P+ICsf0iBA+wQ=
+  - secure: WWMhS/5SP7vvQGEHpzO0zEyoRrpBhpa7pGb4wgezpx1k1hp5L0bc7auoyHoqVrR0Mh7uWLzO8o79GoqKpQEC7SglICLxWrTCw8B/Q4nDwyBYxvmw49WuusadFuL8WVDVrOKxGvz/tr71yohCLn1KZ+PxMUsNgYhCPLMQ/HLSriA=
