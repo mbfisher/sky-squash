@@ -5,15 +5,21 @@
 angular.module('skySquash.controllers', [])
     .controller('AppCtrl', ['$scope', 'auth', function($scope, auth) {
         $scope.auth = auth;
+        /*$scope.login = function (provider) {
+            auth.$login(provider).then(function () {
+                console.log(arguments);
+            });
+        };*/
     }])
     .controller('BookingsCtrl', [
         '$scope',
         '$firebase',
         'auth',
-        'user',
         'transactions',
         '$modal',
-    function($scope, $firebase, auth, user, transactions, $modal) {
+    function($scope, $firebase, auth, transactions, $modal) {
+        var user = auth.user;
+
         var ref = new Firebase('https://sky-squash.firebaseio.com/bookings');
         var sync = $firebase(ref);
 
@@ -31,16 +37,16 @@ angular.module('skySquash.controllers', [])
                 return true;
             }
 
-            return booking.players.indexOf(user.$sync.displayName) === -1;
+            return booking.players.indexOf(user.displayName) === -1;
         };
 
         $scope.join = function (booking) {
-            if (booking.players && booking.players.indexOf(user.$sync.$id) > -1) {
+            if (booking.players && booking.players.indexOf(user.uid) > -1) {
                 return;
             }
 
             booking.players = booking.players || [];
-            booking.players.push(user.$sync.$id);
+            booking.players.push(user.uid);
             $scope.bookings.$save(booking);
         };
 
@@ -80,20 +86,29 @@ angular.module('skySquash.controllers', [])
             });
         };
     }])
-    .controller('UserCtrl', ['$scope', 'user', 'transactions', 'auth', function ($scope, user, transactions, auth) {
-        $scope.logout = auth.$logout;
-
-        user.$loaded().then(function (user) {
-            user.$sync.$bindTo($scope, 'user'); 
+    .controller('UserCtrl', ['$scope', 'transactions', 'auth', function ($scope, transactions, auth) {
+        $scope.auth = auth;
+        auth.$getCurrentUser().then(function (user) {
+            $scope.user = user;
         });
 
-        transactions.$loaded().then(function () {
-            $scope.balance = balance(transactions.$sync);
+        $scope.$on('$firebaseSimpleLogin:login', function () {
+            $scope.user = auth.user;
+        });
 
-            transactions.$sync.$watch(function () {
-                console.log('watch', transactions.$sync);
+        $scope.$on('$firebaseSimpleLogin:logout', function () {
+            $scope.user = auth.user;
+        });
+
+        transactions.$loaded().then(function (transactions) {
+            if (transactions) {
                 $scope.balance = balance(transactions.$sync);
-            });
+
+                transactions.$sync.$watch(function () {
+                    console.log('watch', transactions.$sync);
+                    $scope.balance = balance(transactions.$sync);
+                });
+            }
         });
 
 
