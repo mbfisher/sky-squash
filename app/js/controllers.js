@@ -135,11 +135,12 @@ angular.module('skySquash.controllers', [])
     }])
     .controller('UserCtrl', ['$scope', 'transactions', 'auth', function ($scope, transactions, auth) {
         $scope.auth = auth;
+        $scope.balance = 0;
+
         auth.$getCurrentUser().then(function (user) {
             $scope.user = user;
 
             transactions = transactions(user.uid);
-            $scope.balance = 0;
             transactions.$loaded().then(function (transactions) {
                 if (transactions) {
                     $scope.balance = balance(transactions.$sync);
