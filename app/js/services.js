@@ -13,11 +13,7 @@ angular.module('skySquash.services', [])
         authClient.$getCurrentUser().then(function (user) {
             console.log('Current user', user);
             if (user) {
-                ref.child('users').child(user.uid).set({
-                    displayName: user.displayName,
-                    provider: user.provider,
-                    provider_id: user.id
-                });
+                ref.child('users').child(user.uid).set(user);
             } else {
                 // Logged out
             }
@@ -34,7 +30,11 @@ angular.module('skySquash.services', [])
             }
         };
 
-        auth.$getCurrentUser().then(function () {
+        auth.$getCurrentUser().then(function (u) {
+            if (!u) {
+                return df.resolve();
+            }
+
             var ref = new Firebase('https://sky-squash.firebaseio.com/users').child(auth.user.uid);
             user.$sync = $firebase(ref).$asObject();
 
@@ -54,7 +54,11 @@ angular.module('skySquash.services', [])
             }
         };
 
-        auth.$getCurrentUser().then(function () {
+        auth.$getCurrentUser().then(function (u) {
+            if (!u) {
+                return df.resolve();
+            }
+
             var ref = new Firebase('https://sky-squash.firebaseio.com/transactions').child(auth.user.uid);
             transactions.$sync = $firebase(ref).$asArray();
 
