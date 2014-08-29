@@ -1,9 +1,9 @@
 <div ng-controller="UserCtrl" ng-show="user">
   <div class="col-md-offset-9 col-md-2 user__info">
-    <img class="user__avatar" src="{{user.thirdPartyUserData.picture}}" /> {{user.displayName}} | <a ng-click="showDeposit = !showDeposit" class="user__balance" ng-class="{'user__balance--debt': (balance < 0)}">{{balance | currency:"£"}}</span>
+    <img class="user__avatar" src="{{user.thirdPartyUserData.picture}}" /> {{user.displayName}} | <a ng-click="showDeposit = !showDeposit" class="user__balance" ng-class="{'text-danger': (balance < 0)}">{{balance | currency:"£"}}</a>
   </div>
   <div class="col-md-1 user__logout">
-    <a ng-click="auth.$logout()">Logout</a>
+    <a ng-click="auth.$logout()"><button class="btn btn-default">Logout</button></a>
   </div>
 
   <div ng-show="showDeposit" class="user__deposit">

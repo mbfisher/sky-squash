@@ -3,9 +3,8 @@ a {
 }
 
 .user {
-    background-color: rgb(55, 52, 139);
     height: 42px;
-    padding: 12px 18px;
+    padding: 6px 18px;
     line-height: 21px;
     color: white;
     z-index: 3;
@@ -13,11 +12,11 @@ a {
 
 .user__avatar {
     width: 36px;
-    margin-top: -9px;
+    margin-top: -3px;
 }
 
-.user__balance--debt {
-    color: red;
+.user__logout {
+    margin-top: -3px;
 }
 
 .user__deposit {
