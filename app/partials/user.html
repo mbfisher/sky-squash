@@ -1,8 +1,8 @@
-<div ng-controller="UserCtrl">
-  <div class="user__logout">
-    <a ng-click="logout()">Logout</a>
+<div ng-controller="UserCtrl" ng-show="user">
+  <div class="col-md-offset-9 col-md-2 user__info">
+    <p>{{user.displayName}} | <span class="user__balance" ng-class="{'user__balance--debt': (balance < 0)}">{{balance | currency:"£"}}</span></p>
   </div>
-  <div class="user__info" ng-show="user">
-    <p>{{user.displayName}}</p>
+  <div class="col-md-1 user__logout">
+    <a ng-click="logout()">Logout</a>
   </div>
 </div>

@@ -3,16 +3,17 @@
 /* Controllers */
 
 angular.module('skySquash.controllers', [])
-    .controller('IndexCtrl', ['$scope', 'auth', function($scope, auth) {
+    .controller('AppCtrl', ['$scope', 'auth', function($scope, auth) {
         $scope.auth = auth;
     }])
     .controller('BookingsCtrl', [
         '$scope',
         '$firebase',
         'auth',
-        'users',
+        'user',
+        'transactions',
         '$modal',
-    function($scope, $firebase, auth, users, $modal) {
+    function($scope, $firebase, auth, user, transactions, $modal) {
         var ref = new Firebase('https://sky-squash.firebaseio.com/bookings');
         var sync = $firebase(ref);
 
@@ -20,13 +21,9 @@ angular.module('skySquash.controllers', [])
         $scope.new = {};
 
         $scope.create = function () {
-            $scope.new.status = 'open';
+            $scope.new.status = 'Open';
             $scope.bookings.$add($scope.new);
             $scope.new = {};
-        };
-
-        $scope.playerName = function (id) {
-            return users.get(id).displayName;
         };
 
         $scope.showJoin = function (booking) {
@@ -34,16 +31,16 @@ angular.module('skySquash.controllers', [])
                 return true;
             }
 
-            return booking.players.indexOf(auth.user.uid) === -1;
+            return booking.players.indexOf(user.$sync.displayName) === -1;
         };
 
         $scope.join = function (booking) {
-            if (booking.players && booking.players.indexOf(auth.user.uid) > -1) {
+            if (booking.players && booking.players.indexOf(user.$sync.$id) > -1) {
                 return;
             }
 
             booking.players = booking.players || [];
-            booking.players.push(auth.user.uid);
+            booking.players.push(user.$sync.$id);
             $scope.bookings.$save(booking);
         };
 
@@ -69,15 +66,45 @@ angular.module('skySquash.controllers', [])
             });
             
             modal.result.then(function() {
-                booking.status = 'Confirmed';
+                var costPerPlayer = booking.cost / booking.players.length;
+
+                transactions.$sync.$add({
+                    type: 'credit',
+                    value: costPerPlayer,
+                    booking: booking.$id
+                });
+
+                //booking.status = 'Confirmed';
                 $scope.bookings.$save(booking);
             });
         };
     }])
-    .controller('UserCtrl', ['$scope', 'auth', function ($scope, auth) {
-        auth.$getCurrentUser().then(function (user) {
-            $scope.user = user;
+    .controller('UserCtrl', ['$scope', 'user', 'transactions', 'auth', function ($scope, user, transactions, auth) {
+        user.$loaded().then(function (user) {
+            user.$sync.$bindTo($scope, 'user'); 
         });
+
+        transactions.$loaded().then(function () {
+            $scope.balance = balance(transactions.$sync);
+
+            transactions.$sync.$watch(function () {
+                console.log('watch', transactions.$sync);
+                $scope.balance = balance(transactions.$sync);
+            });
+        });
+
+
+        function balance(transactions) {
+            return transactions.reduce(function (carry, item) {
+                var value = item.value;
+                if (item.type === 'credit') {
+                    value *= -1;
+                }
+
+                carry += value;
+                return carry;
+            }, 0);
+        };
 
         $scope.logout = auth.$logout;
     }]);
