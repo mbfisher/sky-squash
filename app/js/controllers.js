@@ -33,7 +33,7 @@ angular.module('skySquash.controllers', [])
                 return true;
             }
 
-            return booking.players.indexOf(user.uid) === -1;
+            return !(user.uid in booking.players);
         };
 
         $scope.join = function (booking) {
@@ -41,13 +41,51 @@ angular.module('skySquash.controllers', [])
                 return;
             }
 
-            booking.players = booking.players || [];
-            booking.players.push(user.uid);
+            booking.players = booking.players || {};
+            booking.players[user.uid] = {
+                guests: 0
+            };
             $scope.bookings.$save(booking);
         };
 
         $scope.playerName = function (id) {
             return users.$getRecord(id).displayName;
+        };
+
+        $scope.info = function (booking) {
+            var modal = $modal.open({
+                templateUrl: 'editInfo.html',
+                resolve: {
+                    info: function () {
+                        return booking.players[user.uid];
+                    }
+                },
+                controller: ['$scope', '$modalInstance', 'info', function ($scope, $instance, info) {
+                    $scope.info = info;
+
+                    $scope.ok = function () {
+                        $instance.close();
+                    };
+
+                    $scope.cancel = function () {
+                        $instance.dismiss('cancel');
+                    };
+                }]
+            });
+            
+            modal.result.then(function() {
+                $scope.bookings.$save(booking);
+            });
+        };
+
+        $scope.totalPlayers = function (booking) {
+            var players = 0;
+            angular.forEach(booking.players, function (info, uid) {
+                players++;
+                players += info.guests;
+            });
+
+            return players;
         };
 
         $scope.confirm = function (booking) {
@@ -72,15 +110,18 @@ angular.module('skySquash.controllers', [])
             });
             
             modal.result.then(function() {
-                var costPerPlayer = booking.cost / booking.players.length;
+                var costPerPlayer = booking.cost / $scope.totalPlayers(booking);
 
-                angular.forEach(booking.players, function (uid) {
-                    console.log(uid);
+                angular.forEach(booking.players, function (info, uid) {
+                    var value = costPerPlayer;
+                    if (info.guests) {
+                        value += costPerPlayer * info.guests;
+                    }
+
                     transactions(uid).$loaded().then(function (t) {
-                        console.log(uid, t);
                         t.$sync.$add({
                             type: 'credit',
-                            value: costPerPlayer,
+                            value: value,
                             booking: booking.$id,
                             timestamp: new Date().getTime()
                         });
