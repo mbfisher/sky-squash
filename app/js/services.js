@@ -47,26 +47,33 @@ angular.module('skySquash.services', [])
         return user;
     }])
     .factory('transactions', ['$firebase', 'auth', '$q', function ($firebase, auth, $q) {
-        var df = $q.defer();
-        var transactions = {
-            $sync: null,
-            $loaded: function () {
-                return df.promise;
-            }
-        };
+        var cache = {};
 
-        auth.$getCurrentUser().then(function (u) {
-            if (!u) {
-                return df.resolve();
+        return function (uid) {
+            if (cache[uid]) {
+                return cache[uid];
             }
 
-            var ref = new Firebase('https://sky-squash.firebaseio.com/transactions').child(auth.user.uid);
+            var df = $q.defer();
+            var transactions = {
+                $sync: null,
+                $loaded: function () {
+                    return df.promise;
+                }
+            };
+
+            var ref = new Firebase('https://sky-squash.firebaseio.com/transactions').child(uid);
             transactions.$sync = $firebase(ref).$asArray();
 
             transactions.$sync.$loaded().then(function () {
                 df.resolve(transactions);
             });
-        });
 
-        return transactions;
+            cache[uid] = transactions;
+            return transactions;
+        };
+    }])
+    .factory('users', ['$firebase', function ($firebase) {
+        var ref = new Firebase('https://sky-squash.firebaseio.com/users');
+        return $firebase(ref).$asArray();
     }]);
