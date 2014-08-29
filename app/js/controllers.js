@@ -41,7 +41,7 @@ angular.module('skySquash.controllers', [])
             }
 
             booking.players = booking.players || [];
-            booking.players.push(user.uid);
+            booking.players.push(user.displayName);
             $scope.bookings.$save(booking);
         };
 
