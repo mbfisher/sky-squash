@@ -9,3 +9,14 @@
 .user__balance--debt {
     color: red;
 }
+
+.user__deposit {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 9px;
+    position: absolute;
+    top: 48px;
+    right: 48px;
+    z-index: 9;
+}
