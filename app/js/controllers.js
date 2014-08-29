@@ -37,7 +37,7 @@ angular.module('skySquash.controllers', [])
         };
 
         $scope.join = function (booking) {
-            if (booking.players && booking.players.indexOf(user.uid) > -1) {
+            if (booking.players && users.uid in booking.players) {
                 return;
             }
 
