@@ -7,19 +7,12 @@
 // In this case it is a simple value service.
 angular.module('skySquash.services', [])
     .value('version', '0.1.0')
-    .factory('auth', ['$firebaseSimpleLogin', function ($firebaseSimpleLogin) {
+    .factory('db', function () {
         var ref = new Firebase('https://sky-squash.firebaseio.com');
+        return ref;
+    })
+    .factory('auth', ['db', '$firebaseSimpleLogin', function (ref, $firebaseSimpleLogin) {
         var authClient = $firebaseSimpleLogin(ref);
-
-        authClient.$getCurrentUser().then(function (user) {
-            console.log('Current user', user);
-            if (user) {
-                ref.child('users').child(user.uid).set(user);
-            } else {
-                // Logged out
-            }
-        });
-
         return authClient;
     }])
     .factory('user', ['$firebase', 'auth', '$q', function ($firebase, auth, $q) {

@@ -133,15 +133,19 @@ angular.module('skySquash.controllers', [])
             });
         };
     }])
-    .controller('UserCtrl', ['$scope', 'transactions', 'auth', function ($scope, transactions, auth) {
+    .controller('UserCtrl', ['$scope', 'db', 'transactions', 'auth', function ($scope, db, transactions, auth) {
         $scope.auth = auth;
         $scope.balance = 0;
 
-        auth.$getCurrentUser().then(function (user) {
-            $scope.user = user;
+        $scope.$on('$firebaseSimpleLogin:login', function () {
+            $scope.user = auth.user;
 
-            transactions = transactions(user.uid);
-            transactions.$loaded().then(function (transactions) {
+            auth.$getCurrentUser().then(function (user) {
+                console.log('Current user', user);
+                db.child('users').child(user.uid).set(user);
+            });
+
+            transactions($scope.user.uid).$loaded().then(function (transactions) {
                 if (transactions) {
                     $scope.balance = balance(transactions.$sync);
 
@@ -151,27 +155,23 @@ angular.module('skySquash.controllers', [])
                     });
                 }
             });
-        });
 
-        $scope.$on('$firebaseSimpleLogin:login', function () {
-            $scope.user = auth.user;
+            function balance(transactions) {
+                return transactions.reduce(function (carry, item) {
+                    var value = item.value;
+                    if (item.type === 'credit') {
+                        value *= -1;
+                    }
+
+                    carry += value;
+                    return carry;
+                }, 0);
+            }
         });
 
         $scope.$on('$firebaseSimpleLogin:logout', function () {
             $scope.user = auth.user;
         });
-
-        function balance(transactions) {
-            return transactions.reduce(function (carry, item) {
-                var value = item.value;
-                if (item.type === 'credit') {
-                    value *= -1;
-                }
-
-                carry += value;
-                return carry;
-            }, 0);
-        };
 
         $scope.deposit = function () {
             transactions.$sync.$add({
