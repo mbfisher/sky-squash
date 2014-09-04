@@ -174,13 +174,15 @@ angular.module('skySquash.controllers', [])
         });
 
         $scope.deposit = function () {
-            transactions.$sync.$add({
-                type:'debit',
-                value: Number($scope.depositAmount),
-                timestamp: new Date().getTime()
-            });
+            transactions($scope.user.uid).$loaded().then(function (transactions) {
+                transactions.$sync.$add({
+                    type:'debit',
+                    value: Number($scope.depositAmount),
+                    timestamp: new Date().getTime()
+                });
 
-            $scope.depositAmount = null;
-            $scope.showDeposit = false;
+                $scope.depositAmount = null;
+                $scope.showDeposit = false;
+            });
         };
     }]);
