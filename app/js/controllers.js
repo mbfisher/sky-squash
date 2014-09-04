@@ -22,6 +22,13 @@ angular.module('skySquash.controllers', [])
         $scope.bookings = sync.$asArray();
         $scope.new = {};
 
+        $scope.bookingFilters = {
+            Incomplete: {status: '!Completed'},
+            Open: {status: 'Open'},
+            All: null
+        };
+        $scope.displayBooking = $scope.bookingFilters.Incomplete;
+
         $scope.create = function () {
             $scope.new.status = 'Open';
             $scope.bookings.$add($scope.new);
@@ -86,6 +93,11 @@ angular.module('skySquash.controllers', [])
             });
 
             return players;
+        };
+
+        $scope.close = function (booking) {
+            booking.status = 'Closed';
+            $scope.bookings.$save(booking);
         };
 
         $scope.confirm = function (booking) {
