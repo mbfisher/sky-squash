@@ -7,6 +7,7 @@
   </div>
 
   <div ng-show="showDeposit" class="user__deposit">
+    <button type="button" class="close" ng-click="showDeposit = false"><span aria-hidden="true">&times;</button>
     <form class="form form-inline" role="form" ng-submit="deposit()">
       <div class="form-group">
         <input class="form-control" ng-model="depositAmount" />
@@ -15,4 +16,13 @@
         <button class="btn btn-default">Deposit</button>
       </div>
     </form>
+
+    <table class="table user__transactions">
+      <tbody>
+        <tr ng-repeat="transaction in transactions | orderBy:'timestamp':true | limitTo:8">
+          <td>{{transaction.timestamp | date}}</td>
+          <td><span ng-class="{'transaction--debit': transaction.type === 'debit', 'transaction--credit': transaction.type === 'credit'}">{{transaction.value | currency:'£'}}</span></td>
+        </tr>
+      </tbody>
+    </table>
 </div>

@@ -135,7 +135,7 @@ angular.module('skySquash.controllers', [])
                             type: 'credit',
                             value: value,
                             booking: booking.$id,
-                            timestamp: new Date().getTime()
+                            timestamp: new Date(booking.time).getTime()
                         });
                     });
                 });
@@ -147,6 +147,7 @@ angular.module('skySquash.controllers', [])
     }])
     .controller('UserCtrl', ['$scope', 'db', 'transactions', 'auth', function ($scope, db, transactions, auth) {
         $scope.auth = auth;
+        $scope.transactions = [];
         $scope.balance = 0;
 
         $scope.$on('$firebaseSimpleLogin:login', function () {
@@ -159,6 +160,7 @@ angular.module('skySquash.controllers', [])
 
             transactions($scope.user.uid).$loaded().then(function (transactions) {
                 if (transactions) {
+                    $scope.transactions = transactions.$sync;
                     $scope.balance = balance(transactions.$sync);
 
                     transactions.$sync.$watch(function () {

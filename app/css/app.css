@@ -28,4 +28,22 @@ a {
     top: 48px;
     right: 48px;
     z-index: 9;
+    min-width: 300px;
+}
+
+.user__transactions {
+    color: #555;
+    margin: 9px 0 0 0;
+}
+
+.user__transactions .transaction--debit {
+    color: green;
+}
+
+.user__transactions .transaction--credit {
+    color: #CA3A3A;
+}
+
+.user__transactions .transaction--credit:before {
+    content: "-";
 }
