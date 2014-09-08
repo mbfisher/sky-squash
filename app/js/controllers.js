@@ -44,7 +44,7 @@ angular.module('skySquash.controllers', [])
         };
 
         $scope.join = function (booking) {
-            if (booking.players && users.uid in booking.players) {
+            if (booking.players && user.uid in booking.players) {
                 return;
             }
 
@@ -54,6 +54,15 @@ angular.module('skySquash.controllers', [])
             };
             $scope.bookings.$save(booking);
         };
+
+        $scope.leave = function (booking) {
+            if (!(booking.players && user.uid in booking.players)) {
+                return;
+            }
+
+            delete booking.players[user.uid];
+            $scope.bookings.$save(booking);
+        }
 
         $scope.playerName = function (id) {
             return users.$getRecord(id).displayName;
