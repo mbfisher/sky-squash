@@ -109,9 +109,9 @@ angular.module('skySquash.controllers', [])
             $scope.bookings.$save(booking);
         };
 
-        $scope.confirm = function (booking) {
+        $scope.edit = function (booking) {
             var modal = $modal.open({
-                templateUrl: 'confirmBooking.html',
+                templateUrl: 'editBooking.html',
                 resolve: {
                     booking: function () {
                         return booking;
@@ -131,27 +131,35 @@ angular.module('skySquash.controllers', [])
             });
             
             modal.result.then(function() {
-                var costPerPlayer = booking.cost / $scope.totalPlayers(booking);
-
-                angular.forEach(booking.players, function (info, uid) {
-                    var value = costPerPlayer;
-                    if (info.guests) {
-                        value += costPerPlayer * info.guests;
-                    }
-
-                    transactions(uid).$loaded().then(function (t) {
-                        t.$sync.$add({
-                            type: 'credit',
-                            value: value,
-                            booking: booking.$id,
-                            timestamp: new Date(booking.time).getTime()
-                        });
-                    });
-                });
-
-                booking.status = 'Confirmed';
                 $scope.bookings.$save(booking);
             });
+        };
+
+        $scope.confirm = function (booking) {
+            if (!confirm('Sure?')) {
+                return;
+            }
+
+            var costPerPlayer = booking.cost / $scope.totalPlayers(booking);
+
+            angular.forEach(booking.players, function (info, uid) {
+                var value = costPerPlayer;
+                if (info.guests) {
+                    value += costPerPlayer * info.guests;
+                }
+
+                transactions(uid).$loaded().then(function (t) {
+                    t.$sync.$add({
+                        type: 'credit',
+                        value: value,
+                        booking: booking.$id,
+                        timestamp: new Date(booking.time).getTime()
+                    });
+                });
+            });
+
+            booking.status = 'Confirmed';
+            $scope.bookings.$save(booking);
         };
     }])
     .controller('UserCtrl', ['$scope', 'db', 'transactions', 'auth', function ($scope, db, transactions, auth) {
