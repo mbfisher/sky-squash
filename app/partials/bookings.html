@@ -41,32 +41,40 @@
           <a ng-show="showJoin(booking)" ng-click="join(booking)" class="glyphicon glyphicon-plus"></a>
           <a ng-show="!showJoin(booking)" ng-click="leave(booking)" class="glyphicon glyphicon-minus"></a>
           <a ng-click="info(booking)" class="glyphicon glyphicon-user"></a>
-          <a ng-show="booking.status !== 'Closed'" ng-click="close(booking)" class="glyphicon glyphicon-minus-sign"></a>
-          <!--<a ng-click="edit(booking)" class="glyphicon glyphicon-pencil"></a>-->
-          <a ng-click="confirm(booking)" class="glyphicon glyphicon-ok"></a>
+          <a ng-click="edit(booking)" class="glyphicon glyphicon-pencil"></a>
+          <a ng-show="booking.status !== 'Closed'" ng-click="close(booking)" class="glyphicon glyphicon-lock"></a>
+          <a ng-click="confirm(booking)" class="glyphicon glyphicon-thumbs-up"></a>
           </span>
         </td>
       </tr>
     </tbody>
   </table>
 
-  <script type="text/ng-template" id="confirmBooking.html">
+  <script type="text/ng-template" id="editBooking.html">
     <div class="modal-header">
-        <h3 class="modal-title">Confirm Booking</h3>
+        <h3 class="modal-title">Edit Booking</h3>
     </div>
     <form role="form" class="form">
       <div class="modal-body">
           <div class="form-group">
+            <label>When</label>
+            <input class="form-control" ng-model="booking.time" />
+          </div>
+          <div class="form-group">
+            <label>Where</label>
+            <input class="form-control" ng-model="booking.location" />
+          </div>
+          <div class="form-group">
             <label>Courts</label>
-            <input class="form-control" ng-model="booking.courts" />
+            <input class="form-control" type="number" ng-model="booking.courts" />
           </div>
           <div class="form-group">
             <label>Cost</label>
-            <input class="form-control" ng-model="booking.cost" />
+            <input class="form-control" type="number" ng-model="booking.cost" />
           </div>
       </div>
       <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" ng-click="ok()">Confirm</button>
+          <button type="submit" class="btn btn-primary" ng-click="ok()">Update</button>
           <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
       </div>
     </form>
