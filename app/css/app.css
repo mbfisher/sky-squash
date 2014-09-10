@@ -2,6 +2,10 @@ a {
     cursor: pointer;
 }
 
+.row {
+    margin-bottom: 15px;
+}
+
 .user {
     height: 42px;
     padding: 6px 18px;
@@ -46,4 +50,63 @@ a {
 
 .user__transactions .transaction--credit:before {
     content: "-";
+}
+
+.booking {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.booking__title {
+    border-bottom: 1px solid #ccc;
+    padding: 6px;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+}
+
+.booking__title .row {
+    margin-bottom: 0;
+}
+
+.booking--closed .booking__title {
+    background: #f2dede;
+}
+
+.booking--open .booking__title {
+    background: #dff0d8;
+}
+
+.booking__attendance {
+    line-height: 3em;
+}
+
+.booking__time {
+    font-weight: bold;
+} 
+
+.booking__content {
+    padding: 6px;
+    max-height: 120px;
+}
+
+.booking__players {
+    margin: 0;
+}
+
+.booking__actions {
+    border-top: 1px solid #ccc;
+    padding: 6px 12px;
+    height: 33px;
+    text-align: justify;
+}
+
+.booking__actions:after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+}
+
+.booking--closed .booking__actions {
+    text-align: center;
 }
