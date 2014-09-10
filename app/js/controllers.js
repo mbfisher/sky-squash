@@ -135,7 +135,7 @@ angular.module('skySquash.controllers', [])
             });
         };
 
-        $scope.confirm = function (booking) {
+        $scope.complete = function (booking) {
             if (!confirm('Sure?')) {
                 return;
             }
@@ -152,13 +152,13 @@ angular.module('skySquash.controllers', [])
                     t.$sync.$add({
                         type: 'credit',
                         value: value,
-                        booking: booking.$id,
-                        timestamp: new Date(booking.time).getTime()
+                        booking: booking.$id
+                        //timestamp: new Date(booking.time).getTime()
                     });
                 });
             });
 
-            booking.status = 'Confirmed';
+            booking.status = 'Completed';
             $scope.bookings.$save(booking);
         };
     }])
