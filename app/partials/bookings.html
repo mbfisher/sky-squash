@@ -27,12 +27,12 @@
 
   <div class="bookings">
     <div class="row">
-    <div class="col-md-4 col-sm-6 col-xs-12" ng-repeat="(i, booking) in bookings.slice().reverse() | filter:displayBooking">
+    <div class="col-md-4 col-sm-6 col-xs-12" ng-repeat="(i, booking) in bookings.slice().reverse() | filter:displayBooking | orderBy:'time':true">
       <div class="booking booking--{{booking.status | lowercase}}">
         <div class="booking__title">
           <div class="row">
             <div class="col-md-9 col-sm-10 col-xs-9">
-              <div class="booking__time">{{booking.time}}</div>
+              <div class="booking__time">{{booking.time*1000 | date:'EEE dd MMM HH:mm'}}</div>
               <div class="booking__location">{{booking.location}}</div>
             </div>
             <div class="col-md-3 col-sm-2 col-xs-3 text-right">
