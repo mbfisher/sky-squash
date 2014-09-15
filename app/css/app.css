@@ -99,6 +99,7 @@ a {
     padding: 6px 12px;
     height: 33px;
     text-align: justify;
+    font-size: 15px;
 }
 
 .booking__actions:after {
