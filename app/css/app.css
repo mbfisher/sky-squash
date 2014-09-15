@@ -112,6 +112,10 @@ a {
     text-align: center;
 }
 
+.booking--closed .booking__action {
+    margin: 0 69px;
+}
+
 .timepicker .btn {
     padding: 0;
 }
