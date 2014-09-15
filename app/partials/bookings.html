@@ -64,10 +64,10 @@
             <a ng-show="showJoin(booking)" ng-click="join(booking)" class="booking__action glyphicon glyphicon-plus"></a>
             <a ng-show="!showJoin(booking)" ng-click="leave(booking)" class="booking__action glyphicon glyphicon-minus"></a>
             <a ng-click="info(booking)" class="booking__action glyphicon glyphicon-user"></a>
-            <a ng-click="edit(booking)" class="booking__action glyphicon glyphicon-pencil"></a>
             <a ng-show="booking.status !== 'Closed'" ng-click="close(booking)" class="booking__action glyphicon glyphicon-lock"></a>
           </span>
           <span ng-hide="booking.status === 'Completed'">
+            <a ng-click="edit(booking)" class="booking__action glyphicon glyphicon-pencil"></a>
             <a ng-click="complete(booking)" class="booking__action glyphicon glyphicon-thumbs-up"></a>
           </span>
         </div>
