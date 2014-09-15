@@ -67,7 +67,9 @@
             <a ng-click="edit(booking)" class="booking__action glyphicon glyphicon-pencil"></a>
             <a ng-show="booking.status !== 'Closed'" ng-click="close(booking)" class="booking__action glyphicon glyphicon-lock"></a>
           </span>
-          <a ng-click="complete(booking)" class="booking__action glyphicon glyphicon-thumbs-up"></a>
+          <span ng-hide="booking.status === 'Completed'">
+            <a ng-click="complete(booking)" class="booking__action glyphicon glyphicon-thumbs-up"></a>
+          </span>
         </div>
       </div>
     </div>
