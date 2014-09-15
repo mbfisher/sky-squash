@@ -30,8 +30,20 @@ angular.module('skySquash.controllers', [])
         $scope.displayBooking = $scope.bookingFilters.Incomplete;
 
         $scope.create = function () {
-            $scope.new.status = 'Open';
-            $scope.bookings.$add($scope.new);
+            var when = $scope.new.when.date;
+            var time = $scope.new.when.time || new Date();
+
+            when.setHours(time.getHours());
+            when.setMinutes(time.getMinutes());
+            when.setSeconds(0);
+
+            var booking = {
+                status: 'Open',
+                time: Math.floor(when.getTime() / 1000),
+                location:  $scope.new.location
+            };
+
+            $scope.bookings.$add(booking);
             $scope.new = {};
         };
 
@@ -215,5 +227,15 @@ angular.module('skySquash.controllers', [])
                 $scope.depositAmount = null;
                 $scope.showDeposit = false;
             });
+        };
+    }])
+    .controller('DatepickerCtrl', ['$scope', function ($scope) {
+        $scope.isOpen = false;
+
+        $scope.open = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            $scope.isOpen = true;
         };
     }]);
