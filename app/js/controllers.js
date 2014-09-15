@@ -132,8 +132,20 @@ angular.module('skySquash.controllers', [])
                 controller: ['$scope', '$modalInstance', 'booking', function ($scope, $instance, booking) {
                     $scope.booking = booking;
 
+                    var dt = new Date(booking.time * 1000);
+                    $scope.when = {
+                        date: dt,
+                        time: dt
+                    };
+
                     $scope.ok = function () {
-                        $instance.close();
+                        var time = new Date($scope.when.date);
+                        time.setHours($scope.when.time.getHours());
+                        time.setMinutes($scope.when.time.getMinutes());
+                        time.setSeconds(0);
+                        booking.time = Math.floor(time.getTime() / 1000);
+
+                        $instance.close($scope.booking);
                     };
 
                     $scope.cancel = function () {
@@ -142,7 +154,7 @@ angular.module('skySquash.controllers', [])
                 }]
             });
             
-            modal.result.then(function() {
+            modal.result.then(function(booking) {
                 $scope.bookings.$save(booking);
             });
         };

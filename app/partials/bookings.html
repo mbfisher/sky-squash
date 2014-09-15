@@ -9,19 +9,22 @@
     <div class="col-sm-10 col-xs-12">
       <form class="form-inline" role="form" ng-submit="create()">
         <div class="form-group" ng-controller="DatepickerCtrl">
-          <div class="input-group">
-            <input type="text" class="form-control" ng-model="new.when.date" datepicker-popup="EEE dd MMM HH:mm" is-open="isOpen" placeholder="Date" />
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-            </span>
+          <div class="row">
+            <div class="col-xs-8">
+              <div class="input-group">
+                <input type="text" class="form-control" ng-model="new.when.date" datepicker-popup="EEE dd MMM" is-open="isOpen" placeholder="Date" />
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+              </div>
+            </div>
+            <div class="col-xs-4 timepicker timepicker--inline">
+              <timepicker ng-model="new.when.time" minute-step="15" show-meridian="false"></timepicker>
+            </div>
           </div>
         </div>
 
-        <div class="form-group">
-          <timepicker ng-model="new.when.time" minute-step="15" show-meridian="false"></timepicker>
-        </div>
-
-        <div class="form-group">
+        <div class="form-group" style="margin-top: -15px">
           <input class="form-control" id="location" ng-model="new.location" placeholder="Where" />
         </div>
 
@@ -43,7 +46,7 @@
         <div class="booking__title">
           <div class="row">
             <div class="col-md-9 col-sm-10 col-xs-9">
-              <div class="booking__time">{{booking.time*1000 | date:'EEE dd MMM'}}</div>
+              <div class="booking__time">{{booking.time*1000 | date:'EEE dd MMM HH:mm'}}</div>
               <div class="booking__location">{{booking.location}}</div>
             </div>
             <div class="col-md-3 col-sm-2 col-xs-3 text-right">
@@ -76,11 +79,25 @@
     </div>
     <form role="form" class="form">
       <div class="modal-body">
-          <div class="form-group">
-            <label>When</label>
-            <input class="form-control" ng-model="booking.time" />
+        <div class="form-group" ng-controller="DatepickerCtrl">
+          <div class="row">
+            <div class="col-xs-12">
+              <label>When</label>
+            </div>
+            <div class="col-xs-8">
+              <div class="input-group">
+                <input type="text" class="form-control" ng-model="when.date" datepicker-popup="EEE dd MMM" is-open="isOpen" placeholder="Date" />
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+              </div>
+            </div>
+            <div class="col-xs-4 timepicker timepicker--inline">
+              <timepicker ng-model="when.time" minute-step="15" show-meridian="false"></timepicker>
+            </div>
           </div>
-          <div class="form-group">
+        </div>
+          <div class="form-group" style="margin-top: -22px">
             <label>Where</label>
             <input class="form-control" ng-model="booking.location" />
           </div>
