@@ -87,7 +87,7 @@ a {
 
 .booking__content {
     padding: 6px;
-    max-height: 120px;
+    min-height: 99px;
 }
 
 .booking__players {
