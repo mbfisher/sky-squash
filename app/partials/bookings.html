@@ -46,7 +46,7 @@
 
   <div class="bookings">
     <div class="row">
-    <div class="col-md-4 col-sm-6 col-xs-12" ng-repeat="(i, booking) in bookings.slice().reverse() | filter:displayBooking | orderBy:'time':true">
+    <div class="col-md-4 col-sm-6 col-xs-12" ng-repeat="(i, booking) in bookings.slice().reverse() | filter:displayBooking | orderBy:'time'">
       <div class="booking booking--{{booking.status | lowercase}}">
         <div class="booking__title">
           <div class="row">
