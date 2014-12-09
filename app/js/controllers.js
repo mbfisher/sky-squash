@@ -77,7 +77,13 @@ angular.module('skySquash.controllers', [])
         }
 
         $scope.playerName = function (id) {
-            return users.$getRecord(id).displayName;
+            var user = users.$getRecord(id);
+            if (user) {
+                return user.displayName;
+            } else {
+                console.error('No user found for id', id);
+                return '???';
+            }
         };
 
         $scope.info = function (booking) {
@@ -186,7 +192,7 @@ angular.module('skySquash.controllers', [])
             $scope.bookings.$save(booking);
         };
     }])
-    .controller('UserCtrl', ['$scope', 'db', 'transactions', 'auth', function ($scope, db, transactions, auth) {
+    .controller('UserCtrl', ['$scope', 'db', 'transactions', 'auth', '$firebase', function ($scope, db, transactions, auth, $firebase) {
         $scope.auth = auth;
         $scope.transactions = [];
         $scope.balance = 0;
@@ -199,26 +205,51 @@ angular.module('skySquash.controllers', [])
                 db.child('users').child(user.uid).set(user);
             });
 
-            transactions($scope.user.uid).$loaded().then(function (transactions) {
-                if (transactions) {
-                    $scope.transactions = transactions.$sync;
-                    $scope.balance = balance(transactions.$sync);
-
-                    transactions.$sync.$watch(function () {
-                        console.log('watch', transactions.$sync);
-                        $scope.balance = balance(transactions.$sync);
-                    });
-                }
-            });
-
-            function balance(transactions) {
-                return transactions.reduce(function (carry, item) {
-                    var value = item.value;
-                    if (item.type === 'credit') {
-                        value *= -1;
+            var ref = new Firebase('https://sky-squash.firebaseio.com/bookings');
+            var bookings = $firebase(ref).$asArray();
+            bookings.$loaded().then(function () {
+                var balance = 0;
+                bookings.forEach(function (booking) {
+                    if (!booking.cost) {
+                        return;
                     }
 
-                    carry += value;
+                    if (!booking.players || !booking.players[$scope.user.uid]) {
+                        return;
+                    }
+
+                    var totalPlayers = 0;
+
+                    Object.keys(booking.players).forEach(function (uid) {
+                        totalPlayers += 1 + booking.players[uid].guests;
+                    });
+
+                    var costPerPlayer = booking.cost / totalPlayers;
+
+                    var options = booking.players[$scope.user.uid];
+                    balance -= costPerPlayer * (options.guests + 1);
+                });
+
+                transactions($scope.user.uid).$loaded().then(function (transactions) {
+                    if (transactions) {
+                        $scope.transactions = transactions.$sync;
+                        $scope.balance = balance + getBalance(transactions.$sync);
+
+                        transactions.$sync.$watch(function () {
+                            $scope.balance = balance + getBalance(transactions.$sync);
+                        });
+                    } else {
+                        $scope.balance = balance;
+                    }
+                });
+            });
+
+            function getBalance(transactions) {
+                return transactions.reduce(function (carry, item) {
+                    if (item.type === 'debit') {
+                        carry += item.value;
+                    }
+
                     return carry;
                 }, 0);
             }

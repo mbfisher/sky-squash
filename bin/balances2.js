@@ -23,7 +23,6 @@ root.child('users').on('value', function (snapshot) {
             });
 
             var costPerPlayer = booking.cost / totalPlayers;
-            console.log(totalPlayers, booking.cost, costPerPlayer);
 
             Object.keys(booking.players).forEach(function (uid) {
                 var options = booking.players[uid];
@@ -54,6 +53,9 @@ root.child('users').on('value', function (snapshot) {
                 balances[uid].booking_balance = balances[uid].debit - balances[uid].bookings;
                 balances[uid].credit_balance = balances[uid].debit - balances[uid].credit;
                 console.log(users[uid].displayName, balances[uid]);
+            });
+            Object.keys(balances).forEach(function (uid) {
+                console.log(users[uid].displayName+' £'+balances[uid].booking_balance.toFixed(2));
             });
         });
     });
