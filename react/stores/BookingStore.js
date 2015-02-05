@@ -26,7 +26,6 @@ module.exports = createStore({
         this.bookings = _.reduce(bookings, function (result, booking, id) {
             booking.timestamp = booking.timestamp || booking.time;
 
-            console.log(booking);
             booking.moment = moment.unix(parseInt(booking.timestamp));
 
             if (!booking.moment.isValid()) {
