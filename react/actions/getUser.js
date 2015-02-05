@@ -26,6 +26,7 @@ module.exports = function getUser (context, payload, done) {
         if (authData === null) {
             if (authCookie.attempts >= 3) {
                 alert('Exceeded auth attempts!');
+                return;
             }
 
             authCookie.attempts++;

@@ -1,0 +1,5 @@
+@import '~bootstrap/dist/css/bootstrap.css';
+
+a {
+    cursor: pointer;
+}

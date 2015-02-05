@@ -17,9 +17,15 @@ module.exports = createStore({
         debug('Receiving user', user);
 
         this.user = user;
+
+        this.emitChange();
     },
 
     getUser: function () {
         return this.user;
+    },
+
+    isLoggedIn: function () {
+        return !!this.user;
     }
 });
