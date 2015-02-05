@@ -1,5 +1,10 @@
 'use strict';
 
+require('./index.html');
+require('./styles/index.css');
+
+require('bootstrap/js/dropdown');
+
 require('debug').enable('*');
 
 var React = require('react');
