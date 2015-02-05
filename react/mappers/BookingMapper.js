@@ -18,7 +18,7 @@ module.exports = {
 
     format: function (booking) {
         return {
-            timestamp: parseInt(booking.getMoment().format('X')),
+            time: parseInt(booking.getMoment().format('x')),
             location: booking.getLocation(),
             status: booking.getStatus()
         };

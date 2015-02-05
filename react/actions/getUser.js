@@ -62,11 +62,4 @@ module.exports = function getUser (context, payload, done) {
             });
         }
     });
-
-    /*var ref = new Firebase(FIREBASE+'/users');
-    ref.once('value', function (snapshot) {
-        console.log(snapshot.val());
-
-        done();
-    });*/
 };

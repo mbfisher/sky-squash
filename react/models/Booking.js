@@ -25,15 +25,15 @@ Booking.STATUS_OPEN = 'Open';
 Booking.STATUS_CLOSED = 'Closed';
 Booking.STATUS_COMPLETE = 'Complete';
 
-Booking.create = function (data) {
+Booking.create = function (data, id) {
     return new Booking(
-        data.moment,
+        data.moment || (data.time ? moment.unix(data.time) : null),
         data.location,
         data.status,
         data.players,
         data.cost,
         data.courts,
-        data.id
+        id || data.id
     );
 };
 
@@ -67,6 +67,14 @@ Booking.prototype.getId = function () {
 
 Booking.prototype.isOpen = function () {
     return this._status === Booking.STATUS_OPEN;
+};
+
+Booking.prototype.isComplete = function () {
+    return this._status = Booking.STATUS_COMPLETE;
+};
+
+Booking.prototype.getPlayer = function (uid) {
+    return this._players[uid];
 };
 
 module.exports = Booking;
