@@ -36,9 +36,10 @@ var Account = React.createClass({
         this.refreshBalance();
     },
 
-    refreshBalance: function () {
+    refreshBalance: function (event) {
         this.props.context.executeAction(getBalance, {
-            uid: this.state.user.uid
+            uid: this.state.user.uid,
+            notify: !!event
         });
     },
 
@@ -51,14 +52,25 @@ var Account = React.createClass({
 
         var balance;
         if (user.balance !== undefined) {
-            balance = <span><a onClick={this.refreshBalance}>&pound;{user.balance.toFixed(2)}</a></span>;
+            balance = <span>&pound;{user.balance.toFixed(2)}</span>;
         } else {
             balance = <span>?</span>;
         }
 
+        var style = {
+            padding: '12px'
+        };
         return (
-            <div>
-                <p>{user.displayName} ({balance})</p>
+            <div style={style}>
+                <div className="dropdown">
+                    <button className="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                        {user.displayName} ({balance}) <span className="caret"></span>
+                    </button>
+                    <ul className="dropdown-menu">
+                        <li><a onClick={this.refreshBalance}>Refresh balance</a></li>
+                        <li><a onClick={this.handleDeposit}>Deposit</a></li>
+                    </ul>
+                </div>
             </div>
         );
     }

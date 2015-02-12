@@ -27,6 +27,10 @@ module.exports = function getBalance (context, payload, done) {
             balance: balance
         });
 
+        if (payload.notify) {
+            alert('Balance updated');
+        }
+
         done();
     });
 
