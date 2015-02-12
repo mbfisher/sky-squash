@@ -8,10 +8,10 @@ var deleteBooking = require('../actions/deleteBooking');
 
 var Booking = React.createClass({
     handleJoin: function () {
-        this.props.context.executeAction(joinBooking, this.props.booking);
+        this.props.context.executeAction(joinBooking, {booking: this.props.booking});
     },
     handleDelete: function () {
-        this.props.context.executeAction(deleteBooking, this.props.booking);
+        this.props.context.executeAction(deleteBooking, {booking: this.props.booking});
     },
 
     render: function () {

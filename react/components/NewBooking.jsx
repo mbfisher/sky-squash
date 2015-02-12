@@ -5,6 +5,7 @@ var React = require('react/addons');
 var createBooking = require('../actions/createBooking');
 
 var moment = require('moment');
+var Booking = require('../models/Booking');
 
 var NewBooking = React.createClass({
     mixins: [React.addons.LinkedStateMixin],
@@ -23,10 +24,10 @@ var NewBooking = React.createClass({
         if (!_moment.isValid()) {
             alert('Invalid date');
         }
+        console.log(_moment.format());
 
         this.props.context.executeAction(createBooking, {
-            moment: _moment,
-            location: this.state.location
+            booking: new Booking(_moment, this.state.location)
         });
     },
 
