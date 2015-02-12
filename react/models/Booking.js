@@ -1,6 +1,8 @@
 'use strict';
 
 var moment = require('moment');
+var Player = require('./Player');
+var _ = require('lodash');
 
 function Booking(
     moment,
@@ -14,7 +16,7 @@ function Booking(
     this._moment = moment;
     this._location = location;
     this._status = status || Booking.STATUS_OPEN;
-    this._players = players || [];
+    this._players = players || {};
     this._cost = cost || 0;
     this._courts = courts || 0;
 
@@ -27,10 +29,12 @@ Booking.STATUS_COMPLETE = 'Complete';
 
 Booking.create = function (data, id) {
     return new Booking(
-        data.moment || (data.time ? moment.unix(data.time) : null),
+        data.moment || (data.timestamp ? moment.unix(data.timestamp) : null),
         data.location,
         data.status,
-        data.players,
+        data.players ? _.indexBy(_.map(data.players, Player.create), function (player) {
+            return player.getUid();
+        }) : {},
         data.cost,
         data.courts,
         id || data.id
@@ -70,11 +74,20 @@ Booking.prototype.isOpen = function () {
 };
 
 Booking.prototype.isComplete = function () {
-    return this._status = Booking.STATUS_COMPLETE;
+    return this._status === Booking.STATUS_COMPLETE;
 };
 
 Booking.prototype.getPlayer = function (uid) {
     return this._players[uid];
+};
+
+Booking.prototype.addPlayer = function (user, player) {
+    player = player || Player.createFromUser(user);
+    this._players[user.uid] = player;
+};
+
+Booking.prototype.removePlayer = function (user) {
+    delete this._players[user.uid];
 };
 
 module.exports = Booking;
