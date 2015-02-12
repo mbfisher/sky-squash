@@ -7,6 +7,7 @@ var UserStore = require('../stores/UserStore');
 var BookingStore = require('../stores/BookingStore');
 
 var getBalance = require('../actions/getBalance');
+var makeDeposit = require('../actions/makeDeposit');
 
 var Account = React.createClass({
     mixins: [FluxibleMixin],
@@ -38,9 +39,22 @@ var Account = React.createClass({
 
     refreshBalance: function (event) {
         this.props.context.executeAction(getBalance, {
-            uid: this.state.user.uid,
             notify: !!event
         });
+    },
+
+    makeDeposit: function (event) {
+        event.preventDefault();
+
+        var ref = this.refs.depositAmount.getDOMNode();
+        var amount = parseFloat(ref.value);
+
+        if (!isNaN(amount)) {
+            this.props.context.executeAction(makeDeposit, {amount: amount, notify: true});
+            ref.value = '';
+        } else {
+            alert('Invalid amount '+amount);
+        }
     },
 
     render: function () {
@@ -68,8 +82,15 @@ var Account = React.createClass({
                     </button>
                     <ul className="dropdown-menu">
                         <li><a onClick={this.refreshBalance}>Refresh balance</a></li>
-                        <li><a onClick={this.handleDeposit}>Deposit</a></li>
                     </ul>
+                </div>
+                <div>
+                    <form className="form form-inline" onSubmit={this.makeDeposit}>
+                        <div className="form-group">
+                            <input className="form-control" ref="depositAmount" placeholder="Amount" />
+                        </div>
+                        <button className="btn btn-default">Deposit</button>
+                    </form>
                 </div>
             </div>
         );

@@ -11,8 +11,8 @@ var App = React.createClass({
         return (
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-xs-10"><h1>Squash</h1></div>
-                    <div className="col-xs-2">
+                    <div className="col-xs-9"><h1>Squash</h1></div>
+                    <div className="col-xs-3">
                         <Account context={this.props.context} />
                     </div>
                 </div>

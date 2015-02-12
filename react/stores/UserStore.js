@@ -9,46 +9,44 @@ module.exports = createStore({
     storeName: 'UserStore',
     handlers: {
         RECEIVE_USER: 'receiveUser',
-        RECEIVE_BALANCE: 'receiveBalance'
+        RECEIVE_BALANCE: 'receiveBalance',
+        UPDATE_USER: 'updateUser',
     },
 
     initialize: function () {
-        this.user = null;
-        this.transactions = {
-            credit: [],
-            debit: []
-        };
+        this._ref = new Firebase(FIREBASE).child('users');
+        this._user = null;
     },
 
     receiveUser: function (user) {
         debug('Receiving user', user);
 
-        this.user = user;
-
-        this.ref = new Firebase(FIREBASE+'/users').child(user.uid);
-
+        this._user = user;
         this.emitChange();
     },
 
     receiveBalance: function (payload) {
         debug('Receiving balance', payload);
 
-        this.user.balance = payload.balance;
+        this._user.balance = payload.balance;
 
         debug('Updating user balance');
-        this.ref.set(this.user);
+        this._ref.child(this._user.uid).set(this._user);
+        this.emitChange();
+    },
+
+    updateUser: function (user) {
+        this._ref.child(user.uid).set(user);
+        this._user = user;
+
         this.emitChange();
     },
 
     getUser: function () {
-        return this.user;
+        return this._user;
     },
 
     isLoggedIn: function () {
-        return !!this.user;
+        return !!this._user;
     },
-
-    getTransactions: function () {
-        return this.transactions;
-    }
 });
