@@ -4,6 +4,7 @@ var React = require('react');
 
 var FluxibleMixin = require('fluxible').Mixin;
 var UserStore = require('../stores/UserStore');
+var BookingStore = require('../stores/BookingStore');
 
 var getBalance = require('../actions/getBalance');
 
@@ -11,7 +12,10 @@ var Account = React.createClass({
     mixins: [FluxibleMixin],
 
     statics: {
-        storeListeners: [UserStore]
+        storeListeners: {
+            onUserChange: UserStore,
+            onBookingsChange: BookingStore
+        }
     },
 
     getInitialState: function () {
@@ -24,18 +28,18 @@ var Account = React.createClass({
         };
     },
 
-    onChange: function () {
+    onUserChange: function () {
         this.setState(this.getStateFromStores());
+    },
+
+    onBookingsChange: function () {
+        this.refreshBalance();
     },
 
     refreshBalance: function () {
         this.props.context.executeAction(getBalance, {
             uid: this.state.user.uid
         });
-    },
-
-    componentDidMount: function () {
-        this.refreshBalance();
     },
 
     render: function () {
