@@ -32,24 +32,30 @@ var Booking = React.createClass({
             joinOrLeave = <button className="btn btn-default" onClick={this.handleJoin}>Join</button>;
         }
 
+        var style = {
+            width: '48%',
+            margin: '1%',
+            float: 'left'
+        };
         return (
-            <div className="panel panel-default">
+            <div className="panel panel-default" style={style}>
                 <div className="panel-heading">
                     <div className="row">
-                        <div className="col-xs-3">
+                        <div className="col-sm-6">
                             <h4>{booking.getMoment().format('dddd Do MMM YYYY HH:mm')}</h4>
-                            <h5>{booking.getLocation()}</h5>
+                            <h5>{booking.getLocation()} | Courts: {booking.getCourts()} | Cost: &pound;{booking.getCost().toFixed(2)}</h5>
                         </div>
-                        <div className="col-xs-1 col-xs-offset-6">{joinOrLeave}</div>
-                        <div className="col-xs-2">
-                            <div className="dropdown">
-                                <button className="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-                                    Manage <span className="caret"></span>
-                                </button>
-                                <ul className="dropdown-menu">
-                                    <li><a onClick={this.handleJoin}>Join</a></li>
-                                    <li><a onClick={this.handleDelete}>Delete</a></li>
-                                </ul>
+                        <div className="col-sm-6">
+                            <div className="btn-group pull-right">
+                                {joinOrLeave}
+                                <div className="btn-group">
+                                    <button className="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                                        <span className="glyphicon glyphicon-cog"></span> <span className="caret"></span>
+                                    </button>
+                                    <ul className="dropdown-menu">
+                                        <li><a onClick={this.handleDelete}>Delete</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
