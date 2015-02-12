@@ -7,6 +7,8 @@ var _ = require('lodash');
 var async = require('async');
 var moment = require('moment');
 
+var bookingCost = require('../utils/bookingCost');
+
 module.exports = function getBalance (context, payload, done) {
     var uid = payload.uid;
 
@@ -44,12 +46,10 @@ module.exports = function getBalance (context, payload, done) {
             var played = booking.getPlayers().hasOwnProperty(uid);
 
             if (played) {
-                var bookingCost = getBookingCost(booking, uid);
-                balance -= bookingCost;
+                balance -= bookingCost(booking, uid);
             }
         });
 
-        debugTimer('end');
         debug('Calculated balance as '+balance);
         context.dispatch('RECEIVE_BALANCE', {
             uid: uid,
@@ -59,25 +59,5 @@ module.exports = function getBalance (context, payload, done) {
         done();
     });
 
-    function getBookingCost(booking, uid) {
-        var cost = booking.getCost();
-        var playInfo = booking.getPlayer(uid);
-
-        // Joined players
-        var players = Object.keys(booking.getPlayers()).length;
-        // Sum of join players' guests
-        var guests = _.reduce(booking.getPlayers(), function (result, player) {
-            result += (player.guests || 0);
-            return result;
-        }, 0);
-
-        var costPerPlayer = cost / (players + guests);
-        
-        var playerGuests = playInfo.guests || 0;
-
-        var playerCost = costPerPlayer * (1 + playerGuests);
-
-        return playerCost;
-    }
 };
 

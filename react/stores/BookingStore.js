@@ -1,49 +1,59 @@
 'use strict';
 
-var createStore = require('fluxible/utils/createStore');
-var Firebase = require('firebase');
+var debug = require('debug')('App:Store:BookingStore');
 
+var createStore = require('fluxible/utils/createStore');
+
+var Firebase = require('firebase');
 var Booking = require('../models/Booking');
-var moment = require('moment');
 var _ = require('lodash');
 
 module.exports = createStore({
     storeName: 'BookingStore',
     handlers: {
-        RECEIVE_BOOKINGS: 'receiveBookings'
+        CREATE_BOOKING: 'createBooking',
+        DELETE_BOOKING: 'deleteBooking'
     },
 
     initialize: function () {
         this.bookings = [];
-
-        this.ref = new Firebase(FIREBASE);
-        this.ref.child('bookings').on('value', function (snapshot) {
-            this.receiveBookings(snapshot.val());
-        }.bind(this));
     },
 
-    receiveBookings: function (bookings) {
-        this.bookings = _.reduce(bookings, function (result, booking, id) {
-            booking.timestamp = booking.timestamp || booking.time;
+    start: function () {
+        debug('Starting...');
 
-            booking.moment = moment.unix(parseInt(booking.timestamp));
+        this._ref = new Firebase(FIREBASE).child('bookings');
+        this._ref.on('value', this.receiveBookings.bind(this));
+    },
 
-            if (!booking.moment.isValid()) {
-                console.error('Invalid date', booking);
-            }
-
-            booking.id = id;
-            delete(booking.timestamp);
-
-            result.push(Booking.create(booking));
-
-            return result;
-        }, []);
+    receiveBookings: function (snapshot) {
+        debug('Bookings updated');
+        this._bookings = _.map(snapshot.val(), Booking.create);
 
         this.emitChange();
     },
 
+    createBooking: function (booking) {
+        this._ref.push(this._formatModel(booking));
+    },
+
+    deleteBooking: function (booking) {
+        this._ref.child(booking.getId()).remove();
+    },
+
     getBookings: function () {
-        return this.bookings;
+        return this._bookings;
+    },
+
+    getFirebase: function () {
+        return this._ref;
+    },
+
+    _formatModel: function (booking) {
+        return {
+            time: parseInt(booking.getMoment().format('x')),
+            location: booking.getLocation(),
+            status: booking.getStatus()
+        };
     }
 });

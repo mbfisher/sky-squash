@@ -54,6 +54,7 @@ module.exports = function getUser (context, payload, done) {
             });
         } else {
             debug('Found auth');
+            authCookie.attempts = 0;
 
             ref.child('users').child(authData.uid).once('value', function (snapshot) {
                 context.dispatch('RECEIVE_USER', snapshot.val());
@@ -61,5 +62,7 @@ module.exports = function getUser (context, payload, done) {
                 done();
             });
         }
+
+        document.cookie = cookie.serialize('auth', JSON.stringify(authCookie));
     });
 };
