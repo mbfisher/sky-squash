@@ -50,7 +50,7 @@ var Account = React.createClass({
         var user = this.state.user;
 
         var balance;
-        if (user.balance) {
+        if (user.balance !== undefined) {
             balance = <span><a onClick={this.refreshBalance}>&pound;{user.balance.toFixed(2)}</a></span>;
         } else {
             balance = <span>?</span>;

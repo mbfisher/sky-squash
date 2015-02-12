@@ -16,7 +16,7 @@ module.exports = function getBalance (context, payload, done) {
 
     var ref = new Firebase(FIREBASE);
     userBalance(ref, uid, bookings, function (balance) {
-        if (!balance) {
+        if (isNaN(balance)) {
             console.error('Bad balance', balance);
             return;
         }

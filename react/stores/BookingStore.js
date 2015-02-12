@@ -12,7 +12,8 @@ module.exports = createStore({
     storeName: 'BookingStore',
     handlers: {
         CREATE_BOOKING: 'createBooking',
-        DELETE_BOOKING: 'deleteBooking'
+        DELETE_BOOKING: 'deleteBooking',
+        UPDATE_BOOKING: 'updateBooking'
     },
 
     initialize: function () {
@@ -41,6 +42,10 @@ module.exports = createStore({
         this._ref.child(booking.getId()).remove();
     },
 
+    updateBooking: function (booking) {
+        this._ref.child(booking.getId()).set(this._formatModel(booking));
+    },
+
     getBookings: function () {
         return this._bookings;
     },
@@ -51,9 +56,25 @@ module.exports = createStore({
 
     _formatModel: function (booking) {
         return {
-            time: parseInt(booking.getMoment().format('x')),
+            timestamp: parseInt(booking.getMoment().format('X')),
             location: booking.getLocation(),
-            status: booking.getStatus()
+            status: booking.getStatus(),
+            players: this._formatPlayers(booking.getPlayers()),
+            cost: booking.getCost(),
+            courts: booking.getCourts()
         };
+    },
+    _formatPlayers: function (players) {
+        var result = {};
+
+        _.each(players, function (player) {
+            console.log(player);
+            result[player.getUid()] = {
+                displayName: player.getDisplayName(),
+                guests: player.getGuests()
+            };
+        });
+
+        return result;
     }
 });

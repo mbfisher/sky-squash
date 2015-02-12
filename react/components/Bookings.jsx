@@ -4,6 +4,7 @@ var React = require('react');
 
 var FluxibleMixin = require('fluxible').Mixin;
 var BookingStore = require('../stores/BookingStore');
+var UserStore = require('../stores/UserStore');
 
 var _ = require('lodash');
 
@@ -13,7 +14,7 @@ var Bookings = React.createClass({
     mixins: [FluxibleMixin],
 
     statics: {
-        storeListeners: [BookingStore]
+        storeListeners: [BookingStore, UserStore]
     },
 
     getInitialState: function () {
@@ -22,7 +23,8 @@ var Bookings = React.createClass({
 
     getStateFromStores: function () {
         return {
-            bookings: this.getStore(BookingStore).getBookings()
+            bookings: this.getStore(BookingStore).getBookings(),
+            user: this.getStore(UserStore).getUser()
         };
     },
 
@@ -33,7 +35,7 @@ var Bookings = React.createClass({
     render: function () {
         var bookings = _.map(this.state.bookings, function (booking, i) {
             if (booking.isOpen()) {
-                return <Booking context={this.props.context} booking={booking} key={i} />;
+                return <Booking context={this.props.context} booking={booking} user={this.state.user} key={i} />;
             }
         }, this);
 

@@ -2,11 +2,11 @@
 
 var UserStore = require('../stores/UserStore');
 
-module.exports = function joinBooking (context, payload, done) {
+module.exports = function (context, payload, done) {
     var booking = payload.booking;
     var user = context.getStore(UserStore).getUser();
 
-    booking.addPlayer(user);
+    booking.removePlayer(user);
 
     context.dispatch('UPDATE_BOOKING', booking);
     done();
