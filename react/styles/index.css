@@ -3,3 +3,10 @@
 a {
     cursor: pointer;
 }
+
+.modal-container {
+    position: absolute;
+    top: 0;
+    padding: 5% 0;
+    width: 100%;
+}
