@@ -24,7 +24,6 @@ var NewBooking = React.createClass({
         if (!_moment.isValid()) {
             alert('Invalid date');
         }
-        console.log(_moment.format());
 
         this.props.context.executeAction(createBooking, {
             booking: new Booking(_moment, this.state.location)

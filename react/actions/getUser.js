@@ -41,16 +41,24 @@ module.exports = function getUser (context, payload, done) {
                 debug('Logged in', authData);
                 authCookie.attempts = 0;
 
-                var user = {
-                    uid: authData.uid,
-                    provider: authData.provider,
-                    displayName: authData.google.displayName
-                };
+               
+                ref.child('users').child(authData.uid).once('value', function (snapshot) {
+                    var user = snapshot.val();
 
-                ref.child('users').child(authData.uid).set(user);
-                context.dispatch('RECEIVE_USER', user);
+                    if (user === null) {
+                        user = {
+                            uid: authData.uid,
+                            provider: authData.provider,
+                            displayName: authData.google.displayName,
+                            balance: 0,
+                            deposits: []
+                        };
+                        ref.child('users').child(authData.uid).set(user);
+                    }
 
-                done();
+                    context.dispatch('RECEIVE_USER', user);
+                    done();
+                });
             });
         } else {
             debug('Found auth');

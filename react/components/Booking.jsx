@@ -7,6 +7,9 @@ var _ = require('lodash');
 var joinBooking = require('../actions/joinBooking');
 var leaveBooking = require('../actions/leaveBooking');
 var deleteBooking = require('../actions/deleteBooking');
+var completeBooking = require('../actions/completeBooking');
+var openModal = require('../actions/openModal');
+var EditBookingModal = require('./EditBookingModal');
 
 var Booking = React.createClass({
     handleJoin: function () {
@@ -14,6 +17,18 @@ var Booking = React.createClass({
     },
     handleLeave: function () {
         this.props.context.executeAction(leaveBooking, {booking: this.props.booking});
+    },
+    handleEdit: function () {
+        var modalBody = <EditBookingModal context={this.props.context} booking={this.props.booking} />;
+        this.props.context.executeAction(openModal, {
+            title: 'Edit Booking',
+            body: modalBody
+        });
+    },
+    handleComplete: function () {
+        if (confirm('Sure?')) {
+            this.props.context.executeAction(completeBooking, {booking: this.props.booking});
+        }
     },
     handleDelete: function () {
         this.props.context.executeAction(deleteBooking, {booking: this.props.booking});
@@ -53,6 +68,8 @@ var Booking = React.createClass({
                                         <span className="glyphicon glyphicon-cog"></span> <span className="caret"></span>
                                     </button>
                                     <ul className="dropdown-menu">
+                                        <li><a onClick={this.handleEdit}>Edit</a></li>
+                                        <li><a onClick={this.handleComplete}>Complete</a></li>
                                         <li><a onClick={this.handleDelete}>Delete</a></li>
                                     </ul>
                                 </div>

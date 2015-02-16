@@ -84,14 +84,12 @@ var Account = React.createClass({
                         <li><a onClick={this.refreshBalance}>Refresh balance</a></li>
                     </ul>
                 </div>
-                <div>
-                    <form className="form form-inline" onSubmit={this.makeDeposit}>
-                        <div className="form-group">
-                            <input className="form-control" ref="depositAmount" placeholder="Amount" />
-                        </div>
-                        <button className="btn btn-default">Deposit</button>
-                    </form>
-                </div>
+                <form className="form form-inline" onSubmit={this.makeDeposit}>
+                    <div className="form-group">
+                        <input className="form-control" ref="depositAmount" placeholder="Amount" />
+                    </div>
+                    <button className="btn btn-default">Deposit</button>
+                </form>
             </div>
         );
     }

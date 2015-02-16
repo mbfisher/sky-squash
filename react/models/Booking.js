@@ -45,12 +45,24 @@ Booking.prototype.getMoment = function () {
     return this._moment;
 };
 
+Booking.prototype.setMoment = function (_moment) {
+    this._moment = _moment;
+};
+
 Booking.prototype.getLocation = function () {
     return this._location;
 };
 
+Booking.prototype.setLocation = function (location) {
+    this._location = location;
+};
+
 Booking.prototype.getStatus = function () {
     return this._status;
+};
+
+Booking.prototype.setStatus = function (status) {
+    this._status = status;
 };
 
 Booking.prototype.getPlayers = function () {
@@ -61,8 +73,16 @@ Booking.prototype.getCost = function () {
     return this._cost;
 };
 
+Booking.prototype.setCost = function (cost) {
+    this._cost = cost;
+};
+
 Booking.prototype.getCourts = function () {
     return this._courts;
+};
+
+Booking.prototype.setCourts = function (courts) {
+    this._courts = courts;
 };
 
 Booking.prototype.getId = function () {
@@ -87,7 +107,8 @@ Booking.prototype.addPlayer = function (user, player) {
 };
 
 Booking.prototype.removePlayer = function (user) {
-    delete this._players[user.uid];
+    var uid = typeof user === 'object' ? user.uid : user;
+    delete this._players[uid];
 };
 
 module.exports = Booking;
