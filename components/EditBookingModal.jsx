@@ -8,7 +8,6 @@ var closeModal = require('../actions/closeModal');
 var UsersStore = require('../stores/UsersStore');
 var FluxibleMixin = require('fluxible').Mixin;
 var _ = require('lodash');
-var FuzzAldrin = require('fuzzaldrin');
 
 var EditBookingModal = React.createClass({
     mixins: [FluxibleMixin, React.addons.LinkedStateMixin],
