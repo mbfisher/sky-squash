@@ -13,10 +13,10 @@ ref.child('bookings').once('value', function (snapshot) {
     });
 
     ref.child('users').once('value', function (snapshot) {
+        var balance;
         _.each(snapshot.val(), function (user) {
-            userBalance(ref, user.uid, bookings, function (balance) {
-                console.log(user.displayName, balance.toFixed(2));
-            });
+            balance = userBalance(user, bookings);
+            console.log(user.displayName, balance.toFixed(2));
         });
     });
 });
