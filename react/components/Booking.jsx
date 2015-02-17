@@ -37,7 +37,7 @@ var Booking = React.createClass({
     render: function () {
         var booking = this.props.booking;
         var players = _.map(booking.getPlayers(), function (player) {
-            return <li>{player.getDisplayName()}</li>;
+            return <li className="col-sm-6">{player.getDisplayName()}</li>;
         });
 
         var joinOrLeave;
@@ -78,7 +78,7 @@ var Booking = React.createClass({
                     </div>
                 </div>
                 <div className="panel-body">
-                    <ul>
+                    <ul className="list-unstyled">
                         {players}
                     </ul>
                 </div>
