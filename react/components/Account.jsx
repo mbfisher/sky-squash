@@ -74,11 +74,13 @@ var Account = React.createClass({
         var style = {
             padding: '12px'
         };
+        var balanceClass = user.balance >= 5 ? 'text-success' : 'text-danger';
+
         return (
             <div style={style}>
                 <div className="dropdown">
                     <button className="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-                        {user.displayName} ({balance}) <span className="caret"></span>
+                        {user.displayName} <span className={balanceClass}>({balance})</span> <span className="caret"></span>
                     </button>
                     <ul className="dropdown-menu">
                         <li><a onClick={this.refreshBalance}>Refresh balance</a></li>

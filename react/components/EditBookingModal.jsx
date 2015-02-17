@@ -50,8 +50,7 @@ var EditBookingModal = React.createClass({
         booking.setMoment(_moment);
         booking.setLocation(this.state.location);
         booking.setCourts(parseInt(this.state.courts));
-        booking.setCost(parseInt(this.state.cost));
-        console.log(this.state, booking);
+        booking.setCost(parseFloat(this.state.cost));
 
         this.props.context.executeAction(updateBooking, {booking: booking});
         this.props.context.executeAction(closeModal);
