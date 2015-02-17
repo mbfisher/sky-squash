@@ -1,26 +1,22 @@
+'use strict';
+
 var Firebase = require('firebase');
-var root = new Firebase('https://sky-squash.firebaseio.com/');
+var _ = require('lodash');
+var Booking = require('../models/Booking');
+var userBalance = require('../utils/userBalance');
 
-root.child('users').on('value', function (snapshot) {
-    var users = snapshot.val();
+var ref = new Firebase('http://sky-squash.firebaseio.com');
 
-    root.child('transactions').on('value', function (snapshot) {
-        var transactions = snapshot.val();
+ref.child('bookings').once('value', function (snapshot) {
+    var bookings = _.map(snapshot.val(), Booking.create).filter(function (booking) {
+        return booking.isComplete();
+    });
 
-        Object.keys(transactions).forEach(function (uid) {
-            var user = users[uid];
-
-            var balance = 0;
-            Object.keys(transactions[uid]).forEach(function (id) {
-                var transaction = transactions[uid][id];
-                if (transaction.type === 'credit') {
-                    balance -= transaction.value;
-                } else {
-                    balance += transaction.value;
-                }
+    ref.child('users').once('value', function (snapshot) {
+        _.each(snapshot.val(), function (user) {
+            userBalance(ref, user.uid, bookings, function (balance) {
+                console.log(user.displayName, balance.toFixed(2));
             });
-
-            console.log(user.displayName, '£'+balance.toFixed(2));
         });
     });
 });

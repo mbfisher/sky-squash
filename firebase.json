@@ -1,6 +1,6 @@
 {
     "firebase": "sky-squash",
-    "public": "app",
+    "public": "public",
     "ignore": [
         "firebase.json",
         "**/.*",
