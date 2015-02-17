@@ -32,6 +32,11 @@
   "scripts": {
     "prestart": "npm install",
     "start": "./node_modules/.bin/http-server -a 0.0.0.0 -p 8000",
-    "pretest": "npm install"
+
+    "prebuild": "npm install",
+    "build": "./node_modules/.bin/webpack -p",
+
+    "predeploy": "npm run build",
+    "deploy": "./node_modules/.bin/firebase deploy --email $FIREBASE_EMAIL --password $FIREBASE_PASSWORD -s"
   }
 }

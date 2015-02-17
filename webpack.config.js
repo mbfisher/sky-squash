@@ -6,7 +6,7 @@ var querystring = require('querystring');
 var path = require('path');
 
 module.exports = {
-    entry: './react/index.js',
+    entry: './index.js',
     output: {
         path: 'public',
         filename: 'index.js'
@@ -14,7 +14,7 @@ module.exports = {
     resolve: {
         extensions: ['', '.js', '.jsx'],
     },
-    copyContext: path.join(__dirname, 'react'),
+    copyContext: __dirname,
     module: {
         loaders: [
             {test: /\.jsx$/, loader: 'jsx'},
