@@ -4,6 +4,11 @@ a {
     cursor: pointer;
 }
 
+.loading {
+    width: 48px;
+    margin: 48px auto;
+}
+
 .modal-container {
     position: absolute;
     top: 0;

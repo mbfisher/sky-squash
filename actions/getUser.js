@@ -2,75 +2,73 @@
 
 var debug = require('debug')('App:Action:getUser');
 var Firebase = require('firebase');
-var cookie = require('cookie');
 
 module.exports = function getUser (context, payload, done) {
-    var cookies = cookie.parse(document.cookie);
-    var authCookie = cookies.auth;
+    var ref = new Firebase(FIREBASE);
+    var reload;
 
-    if (authCookie) {
-        authCookie = JSON.parse(authCookie);
-    } else {
-        debug('Creating auth cookie');
-        authCookie = {
-            attempts: 0
+    function login() {
+        if (sessionStorage.redirect) {
+            debug('sessionStore.redirect found, waiting for onAuth to be called again');
+
+            reload = setTimeout(function () {
+                console.warn('OAuth timeout triggered!');
+
+                debug('Clearing sessionStorage.redirect');
+                delete sessionStorage.redirect;
+
+                debug('Reloading');
+                location.reload();
+            }, 5000);
+
+            return;
         }
-        document.cookie = cookie.serialize('auth', JSON.stringify(authCookie));
+
+        debug('Setting sessionStorage.redirect');
+        sessionStorage.redirect = true;
+
+        debug('Logging in...');
+        ref.authWithOAuthRedirect('google', function (err) {
+            if (err) {
+                throw err;
+            }
+        });
     }
     
-    debug('authCookie', authCookie);
+    function handleAuthData(authData) {
+        debug('Handling auth data', authData);
 
-    var ref = new Firebase(FIREBASE);
-
-    ref.onAuth(function (authData) {
-        if (authData === null) {
-            if (authCookie.attempts >= 3) {
-                alert('Exceeded auth attempts!');
-                return;
-            }
-
-            authCookie.attempts++;
-            document.cookie = cookie.serialize('auth', JSON.stringify(authCookie));
-
-            debug('Logging in...');
-            ref.authWithOAuthPopup('google', function (err, authData) {
-                if (err) {
-                    throw err;
-                }
-
-                debug('Logged in', authData);
-                authCookie.attempts = 0;
-
-               
-                ref.child('users').child(authData.uid).once('value', function (snapshot) {
-                    var user = snapshot.val();
-
-                    if (user === null) {
-                        user = {
-                            uid: authData.uid,
-                            provider: authData.provider,
-                            displayName: authData.google.displayName,
-                            balance: 0,
-                            deposits: []
-                        };
-                        ref.child('users').child(authData.uid).set(user);
-                    }
-
-                    context.dispatch('RECEIVE_USER', user);
-                    done();
-                });
-            });
-        } else {
-            debug('Found auth');
-            authCookie.attempts = 0;
-
-            ref.child('users').child(authData.uid).once('value', function (snapshot) {
-                context.dispatch('RECEIVE_USER', snapshot.val());
-
-                done();
-            });
+        if (reload) {
+            debug('Clearing reload timeout');
+            clearTimeout(reload);
         }
 
-        document.cookie = cookie.serialize('auth', JSON.stringify(authCookie));
+        ref.child('users').child(authData.uid).once('value', function (snapshot) {
+            var user = snapshot.val();
+
+            if (user === null) {
+                user = {
+                    uid: authData.uid,
+                    provider: authData.provider,
+                    displayName: authData.google.displayName,
+                    balance: 0,
+                    deposits: []
+                };
+                ref.child('users').child(authData.uid).set(user);
+            }
+
+            context.dispatch('RECEIVE_USER', user);
+            done();
+        });
+    }
+
+    ref.onAuth(function (authData) {
+        console.log('onAuth', authData); 
+
+        if (authData === null) {
+            login();
+        } else {
+            handleAuthData(authData);
+        }
     });
 };
