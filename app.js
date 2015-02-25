@@ -12,5 +12,6 @@ app.registerStore(require('./stores/UserStore'));
 app.registerStore(require('./stores/UsersStore'));
 app.registerStore(require('./stores/BookingStore'));
 app.registerStore(require('./stores/ModalStore'));
+app.registerStore(require('./stores/CreditCardStore'));
 
 module.exports = app;

@@ -12,6 +12,7 @@ module.exports = {
         filename: 'index.js'
     },
     resolve: {
+        root: [__dirname],
         extensions: ['', '.js', '.jsx'],
     },
     copyContext: __dirname,

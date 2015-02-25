@@ -2,6 +2,7 @@
 
 var React = require('react');
 
+var CreditCard = require('./CreditCard');
 var Account = require('./Account');
 var NewBooking = require('./NewBooking');
 var Bookings = require('./Bookings');
@@ -15,6 +16,7 @@ var App = React.createClass({
                     <div className="col-xs-6"><h1>Squash</h1></div>
                     <div className="col-xs-6">
                         <div className="pull-right">
+                            <CreditCard context={this.props.context} />
                             <Account context={this.props.context} />
                         </div>
                     </div>
