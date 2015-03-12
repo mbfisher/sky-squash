@@ -24,7 +24,7 @@ module.exports = createStore({
         debug('Starting...');
 
         this._ref = new Firebase(FIREBASE).child('bookings');
-        this._ref.on('value', this.receiveBookings.bind(this));
+        this._ref.on('value', this.receiveBookings.bind(this), Function.prototype.bind.call(console.error, console));
     },
 
     receiveBookings: function (snapshot) {
