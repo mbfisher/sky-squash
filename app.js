@@ -5,7 +5,7 @@ var Firebase = require('firebase');
 var App = require('./components/App');
 
 var app = new Fluxible({
-    appComponent: App
+    component: App
 });
 
 app.registerStore(require('./stores/UserStore'));

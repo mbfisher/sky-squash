@@ -2,7 +2,7 @@
 
 var React = require('react');
 
-var FluxibleMixin = require('fluxible').Mixin;
+var FluxibleMixin = require('fluxible/addons/FluxibleMixin');
 var ModalStore = require('../stores/ModalStore');
 
 var closeModal = require('../actions/closeModal');

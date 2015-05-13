@@ -2,7 +2,7 @@
 
 var React = require('react');
 
-var FluxibleMixin = require('fluxible').Mixin;
+var FluxibleMixin = require('fluxible/addons/FluxibleMixin');
 var BookingStore = require('../stores/BookingStore');
 var UserStore = require('../stores/UserStore');
 
@@ -23,8 +23,8 @@ var Bookings = React.createClass({
 
     getStateFromStores: function () {
         return {
-            bookings: this.getStore(BookingStore).getBookings(),
-            user: this.getStore(UserStore).getUser()
+            bookings: this.props.context.getStore(BookingStore).getBookings(),
+            user: this.props.context.getStore(UserStore).getUser()
         };
     },
 

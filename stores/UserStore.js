@@ -1,7 +1,7 @@
 'use strict';
 
 var debug = require('debug')('App:Store:UserStore');
-var createStore = require('fluxible/utils/createStore');
+var createStore = require('fluxible/addons/createStore');
 
 var Firebase = require('firebase');
 

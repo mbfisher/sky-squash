@@ -6,7 +6,7 @@ var moment = require('moment');
 var updateBooking = require('../actions/updateBooking');
 var closeModal = require('../actions/closeModal');
 var UsersStore = require('../stores/UsersStore');
-var FluxibleMixin = require('fluxible').Mixin;
+var FluxibleMixin = require('fluxible/addons/FluxibleMixin');
 var _ = require('lodash');
 
 var EditBookingModal = React.createClass({

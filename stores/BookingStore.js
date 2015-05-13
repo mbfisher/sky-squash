@@ -2,7 +2,7 @@
 
 var debug = require('debug')('App:Store:BookingStore');
 
-var createStore = require('fluxible/utils/createStore');
+var createStore = require('fluxible/addons/createStore');
 
 var Firebase = require('firebase');
 var Booking = require('../models/Booking');
@@ -28,7 +28,7 @@ module.exports = createStore({
     },
 
     receiveBookings: function (snapshot) {
-        debug('Bookings updated');
+        debug('Bookings updated', snapshot.val());
         this._bookings = _.map(snapshot.val(), Booking.create);
 
         this.emitChange();
