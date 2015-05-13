@@ -47,13 +47,8 @@ var Booking = React.createClass({
             joinOrLeave = <button className="btn btn-default" onClick={this.handleJoin}>Join</button>;
         }
 
-        var style = {
-            width: '48%',
-            margin: '1%',
-            float: 'left'
-        };
         return (
-            <div className="panel panel-default" style={style}>
+            <div className="booking panel panel-default">
                 <div className="panel-heading">
                     <div className="row">
                         <div className="col-sm-6">

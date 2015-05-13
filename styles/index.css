@@ -15,3 +15,13 @@ a {
     padding: 5% 0;
     width: 100%;
 }
+
+.booking {
+    width: 48%;
+    margin: 1%;
+    float: left;
+}
+
+.booking:nth-child(odd) {
+    clear: both;
+}
