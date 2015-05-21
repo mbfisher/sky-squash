@@ -20,6 +20,7 @@
     "react": "^0.13.0"
   },
   "devDependencies": {
+    "async": "^0.9.2",
     "concurrently": "0.0.5",
     "copy-loader": "^0.1.2",
     "css-loader": "^0.9.1",

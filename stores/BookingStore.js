@@ -7,6 +7,7 @@ var createStore = require('fluxible/addons/createStore');
 var Firebase = require('firebase');
 var Booking = require('../models/Booking');
 var _ = require('lodash');
+var formatBooking = require('../utils/formatBooking');
 
 module.exports = createStore({
     storeName: 'BookingStore',
@@ -35,7 +36,7 @@ module.exports = createStore({
     },
 
     createBooking: function (booking) {
-        this._ref.push(this._formatModel(booking));
+        this._ref.push(formatBooking(booking));
     },
 
     deleteBooking: function (booking) {
@@ -43,7 +44,7 @@ module.exports = createStore({
     },
 
     updateBooking: function (booking) {
-        this._ref.child(booking.getId()).set(this._formatModel(booking));
+        this._ref.child(booking.getId()).set(formatBooking(booking));
     },
 
     getBookings: function () {
@@ -52,29 +53,5 @@ module.exports = createStore({
 
     getFirebase: function () {
         return this._ref;
-    },
-
-    _formatModel: function (booking) {
-        return {
-            timestamp: parseInt(booking.getMoment().format('X')),
-            location: booking.getLocation(),
-            status: booking.getStatus(),
-            players: this._formatPlayers(booking.getPlayers()),
-            cost: booking.getCost(),
-            courts: booking.getCourts()
-        };
-    },
-    _formatPlayers: function (players) {
-        var result = {};
-
-        _.each(players, function (player) {
-            console.log(player);
-            result[player.getUid()] = {
-                displayName: player.getDisplayName(),
-                guests: player.getGuests()
-            };
-        });
-
-        return result;
     }
 });
